@@ -11,7 +11,6 @@
             /* Design System - Dark Mode Avançado */
             --bg-base: #07090e;
             --bg-panel: rgba(15, 23, 42, 0.7);
-            --bg-panel-hover: rgba(30, 41, 59, 0.8);
             --border-color: rgba(51, 65, 85, 0.5);
             
             --text-primary: #f8fafc;
@@ -39,104 +38,74 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
         }
 
-        /* Utilidades de Glassmorphism */
+        /* Glassmorphism */
         .glass-panel {
             background: var(--bg-panel);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 1.5rem;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
-        .glass-panel:hover { border-color: rgba(51, 65, 85, 0.9); }
 
         /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
         .logo-area h1 { font-size: 1.5rem; font-weight: 700; background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue)); -webkit-background-clip: text; color: transparent; }
         .logo-area p { color: var(--text-secondary); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px;}
         
-        .pulse-status {
-            display: flex; align-items: center; gap: 8px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 8px 16px; border-radius: 50px; color: var(--accent-emerald);
-        }
+        .pulse-status { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 8px 16px; border-radius: 50px; color: var(--accent-emerald); }
         .pulse-dot { width: 8px; height: 8px; background: var(--accent-emerald); border-radius: 50%; box-shadow: 0 0 10px var(--accent-emerald); animation: pulse 1.5s infinite; }
 
-        /* Grid Master */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 1.5rem;
-        }
-        .main-col { display: flex; flex-direction: column; gap: 1.5rem; }
-        .side-col { display: flex; flex-direction: column; gap: 1.5rem; }
-
-        /* KPIs Superiores */
-        .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-        .kpi-card { display: flex; flex-direction: column; justify-content: space-between; }
-        .kpi-header { display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
-        .kpi-body { margin-top: 1rem; }
-        .kpi-value { font-size: 2rem; font-weight: 700; display: flex; align-items: baseline; gap: 8px; }
-        .kpi-unit { font-size: 1rem; color: var(--text-secondary); font-weight: 400; }
+        /* Grids Base */
+        .top-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
         
-        /* Mini Progress Bars para KPIs */
-        .progress-track { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-top: 12px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease-in-out; }
+        /* NOVO: Grid Intermediário para caber os Gráficos e o Fluxo */
+        .mid-grid { display: grid; grid-template-columns: 1.5fr 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
 
-        /* Mapa de Chão de Fábrica - Equipilates */
-        .factory-flow {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 1rem;
-            position: relative;
-        }
-        .flow-step {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-            position: relative;
-        }
+        /* KPIs */
+        .kpi-header { display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
+        .kpi-value { font-size: 2rem; font-weight: 700; display: flex; align-items: baseline; gap: 8px; margin-top: 1rem;}
+        .kpi-unit { font-size: 1rem; color: var(--text-secondary); font-weight: 400; }
+        .progress-track { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-top: 12px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+
+        /* Flow Fábrica */
+        .factory-flow { display: flex; flex-direction: column; gap: 8px; margin-top: 1rem; flex-grow: 1; justify-content: space-between;}
+        .flow-step { background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.8rem; display: flex; align-items: center; gap: 12px; }
         .flow-step.active { border-color: var(--accent-cyan); box-shadow: var(--glow-cyan); }
         .flow-step.warning { border-color: var(--accent-amber); }
-        .flow-step.critical { border-color: var(--accent-rose); box-shadow: var(--glow-rose); animation: shake 0.5s infinite alternate; }
-        
-        .step-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .step-icon { font-size: 1.2rem; }
         .step-title { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
-        .step-metric { font-size: 0.75rem; color: var(--accent-cyan); margin-top: 4px; font-weight: 500;}
 
-        /* Tabelas e Badges */
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
-        .data-table th { text-align: left; padding: 12px 8px; color: var(--text-secondary); font-weight: 500; border-bottom: 1px solid var(--border-color); }
-        .data-table td { padding: 12px 8px; border-bottom: 1px solid rgba(51, 65, 85, 0.3); }
-        
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px; }
-        .bg-rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
-        .bg-amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
-        .bg-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+        /* QUADRO DE CONTROLE DE PRODUÇÃO MATRICIAL */
+        .production-board-wrapper { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
+        .board-legend { display: flex; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;}
+        .legend-box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
 
-        /* Toasts System */
-        .toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
-        .toast { background: var(--bg-panel); backdrop-filter: blur(10px); border-left: 4px solid var(--accent-cyan); padding: 1rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); color: white; font-size: 0.85rem; min-width: 300px; transform: translateX(120%); animation: slideIn 0.3s forwards; }
-        .toast.error { border-left-color: var(--accent-rose); }
+        .matrix-table { width: 100%; border-collapse: separate; border-spacing: 4px; min-width: 900px; }
+        .matrix-table th { color: var(--text-primary); font-size: 0.75rem; font-weight: 600; padding: 8px 4px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 4px; text-transform: uppercase; }
+        .matrix-table td.row-header { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); text-align: right; padding-right: 15px; width: 160px; }
+        .matrix-table td.status-cell { width: 45px; height: 45px; text-align: center; vertical-align: middle; font-weight: 700; font-size: 1.1rem; border-radius: 6px; transition: transform 0.2s; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .matrix-table td.status-cell:hover { transform: scale(1.05); filter: brightness(1.2); }
 
-        /* Animações */
+        .status-v { background-color: #10b981; color: white; border: 1px solid #059669; }
+        .status-x { background-color: #ef4444; color: white; border: 1px solid #dc2626; box-shadow: var(--glow-rose) !important;}
+        .status-e { background-color: #3b82f6; color: white; border: 1px solid #2563eb; }
+        .status-none { background-color: #334155; color: #94a3b8; border: 1px solid #1e293b; }
+
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-        @keyframes slideIn { to { transform: translateX(0); } }
-        @keyframes shake { from { transform: translateY(-2px); } to { transform: translateY(2px); } }
+        
+        .toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
+        .toast { background: var(--bg-panel); backdrop-filter: blur(10px); border-left: 4px solid var(--accent-cyan); padding: 1rem; border-radius: 8px; color: white; font-size: 0.85rem; animation: slideIn 0.3s forwards; }
+        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
 
-        /* Responsividade */
-        @media (max-width: 1200px) { .dashboard-grid { grid-template-columns: 1fr; } .kpi-row { grid-template-columns: repeat(2, 1fr); } .factory-flow { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 768px) { .kpi-row, .factory-flow { grid-template-columns: 1fr; } }
+        @media (max-width: 1200px) { .mid-grid, .top-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -148,236 +117,165 @@
         </div>
         <div class="pulse-status">
             <div class="pulse-dot"></div>
-            <span id="sync-status">Sincronização Ativa (Ao Vivo)</span>
+            Sincronização Ativa (Ao Vivo)
         </div>
     </header>
 
-    <div class="dashboard-grid">
-        <div class="main-col">
-            <div class="kpi-row">
-                <div class="glass-panel kpi-card">
-                    <div class="kpi-header"><span>Produção Diária</span> <span style="color: var(--accent-emerald)">+5%</span></div>
-                    <div class="kpi-body">
-                        <div class="kpi-value"><span id="prod-val">42</span><span class="kpi-unit">/ 50 un</span></div>
-                        <div class="progress-track"><div class="progress-fill" style="width: 84%; background: var(--accent-cyan)"></div></div>
-                    </div>
-                </div>
-                <div class="glass-panel kpi-card">
-                    <div class="kpi-header"><span>OEE (Eficiência Global)</span> <span>Meta: 85%</span></div>
-                    <div class="kpi-body">
-                        <div class="kpi-value">81.2<span class="kpi-unit">%</span></div>
-                        <div class="progress-track"><div class="progress-fill" style="width: 81.2%; background: var(--accent-amber)"></div></div>
-                    </div>
-                </div>
-                <div class="glass-panel kpi-card">
-                    <div class="kpi-header"><span>Taxa de Refugo (Madeira)</span> <span style="color: var(--accent-emerald)">-0.5%</span></div>
-                    <div class="kpi-body">
-                        <div class="kpi-value" style="color: var(--accent-emerald)">1.8<span class="kpi-unit">%</span></div>
-                        <div class="progress-track"><div class="progress-fill" style="width: 1.8%; background: var(--accent-rose)"></div></div>
-                    </div>
-                </div>
-                <div class="glass-panel kpi-card">
-                    <div class="kpi-header"><span>Backlog de Pedidos</span></div>
-                    <div class="kpi-body">
-                        <div class="kpi-value">128<span class="kpi-unit">Aparelhos</span></div>
-                        <div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-secondary);">Equivalente a 3.5 dias de produção</div>
-                    </div>
-                </div>
-            </div>
+    <div class="top-grid">
+        <div class="glass-panel">
+            <div class="kpi-header"><span>Produção Diária</span> <span style="color: var(--accent-emerald)">+5%</span></div>
+            <div class="kpi-value"><span id="prod-val">42</span><span class="kpi-unit">/ 50 un</span></div>
+            <div class="progress-track"><div class="progress-fill" style="width: 84%; background: var(--accent-cyan)"></div></div>
+        </div>
+        <div class="glass-panel">
+            <div class="kpi-header"><span>OEE (Eficiência)</span> <span>Meta: 85%</span></div>
+            <div class="kpi-value">81.2<span class="kpi-unit">%</span></div>
+            <div class="progress-track"><div class="progress-fill" style="width: 81.2%; background: var(--accent-amber)"></div></div>
+        </div>
+        <div class="glass-panel">
+            <div class="kpi-header"><span>Taxa de Refugo</span> <span style="color: var(--accent-emerald)">-0.5%</span></div>
+            <div class="kpi-value" style="color: var(--accent-emerald)">1.8<span class="kpi-unit">%</span></div>
+            <div class="progress-track"><div class="progress-fill" style="width: 1.8%; background: var(--accent-rose)"></div></div>
+        </div>
+        <div class="glass-panel">
+            <div class="kpi-header"><span>Backlog</span></div>
+            <div class="kpi-value">128<span class="kpi-unit">Aparelhos</span></div>
+            <div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-secondary);">Equivalente a 3.5 dias úteis</div>
+        </div>
+    </div>
 
-            <div class="glass-panel">
-                <div class="kpi-header" style="margin-bottom: 0.5rem; font-size: 1rem; color: #fff;">Status do Chão de Fábrica (Gargalos)</div>
-                <div class="factory-flow">
-                    <div class="flow-step active">
-                        <div class="step-icon">🪚</div>
-                        <div class="step-title">Marcenaria CNC</div>
-                        <div class="step-metric">22 Peças/h</div>
-                    </div>
-                    <div class="flow-step warning" id="serralheria-step">
-                        <div class="step-icon">⚡</div>
-                        <div class="step-title">Serralheria/Solda</div>
-                        <div class="step-metric" style="color: var(--accent-amber)">Atraso: 15 min</div>
-                    </div>
-                    <div class="flow-step active">
-                        <div class="step-icon">🧵</div>
-                        <div class="step-title">Estofaria</div>
-                        <div class="step-metric">Estável</div>
-                    </div>
-                    <div class="flow-step active">
-                        <div class="step-icon">🔧</div>
-                        <div class="step-title">Montagem Final</div>
-                        <div class="step-metric">Reformers em foco</div>
-                    </div>
-                    <div class="flow-step active">
-                        <div class="step-icon">📦</div>
-                        <div class="step-title">CQ & Expedição</div>
-                        <div class="step-metric">4 Liberações</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-panel">
-                <div class="kpi-header" style="margin-bottom: 1rem; font-size: 1rem; color: #fff;">Volume de Produção: Previsto vs Realizado (Semana)</div>
-                <div style="height: 250px; width: 100%;">
-                    <canvas id="mixedChart"></canvas>
-                </div>
+    <div class="mid-grid">
+        <div class="glass-panel">
+            <div class="kpi-header" style="color: #fff; font-size: 1rem;">Status (Gargalos)</div>
+            <div class="factory-flow">
+                <div class="flow-step active"><div class="step-icon">🪚</div><div class="step-title">Marcenaria CNC</div></div>
+                <div class="flow-step warning"><div class="step-icon">⚡</div><div class="step-title">Serralheria (Atraso 15m)</div></div>
+                <div class="flow-step active"><div class="step-icon">🧵</div><div class="step-title">Estofaria</div></div>
+                <div class="flow-step active"><div class="step-icon">🔧</div><div class="step-title">Montagem Final</div></div>
+                <div class="flow-step active"><div class="step-icon">📦</div><div class="step-title">CQ & Expedição</div></div>
             </div>
         </div>
 
-        <div class="side-col">
-            <div class="glass-panel">
-                <div class="kpi-header" style="margin-bottom: 1rem; color: #fff;">Mix em Linha Hoje</div>
-                <div style="height: 180px; width: 100%;">
-                    <canvas id="mixChart"></canvas>
-                </div>
+        <div class="glass-panel">
+            <div class="kpi-header" style="color: #fff; font-size: 1rem; margin-bottom: 1rem;">Volume: Previsto vs Realizado (Semana)</div>
+            <div style="flex-grow: 1; position: relative; min-height: 200px;">
+                <canvas id="mixedChart"></canvas>
             </div>
+        </div>
 
-            <div class="glass-panel" style="flex-grow: 1;">
-                <div class="kpi-header" style="margin-bottom: 1rem; color: #fff;">Diário de Ocorrências</div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Local</th>
-                            <th>Motivo</th>
-                            <th>Nível</th>
-                        </tr>
-                    </thead>
-                    <tbody id="alerts-body">
-                        <tr>
-                            <td>Serralheria</td>
-                            <td>Falta Gás Mig</td>
-                            <td><span class="badge bg-amber">ATENÇÃO</span></td>
-                        </tr>
-                        <tr>
-                            <td>Marcenaria</td>
-                            <td>Troca de Fresa CNC</td>
-                            <td><span class="badge bg-emerald">RESOLVIDO</span></td>
-                        </tr>
-                        <tr>
-                            <td>Montagem</td>
-                            <td>Lote Mola QC Reprovado</td>
-                            <td><span class="badge bg-rose">CRÍTICO</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="glass-panel">
+            <div class="kpi-header" style="color: #fff; font-size: 1rem; margin-bottom: 1rem;">Mix Hoje</div>
+            <div style="flex-grow: 1; position: relative; min-height: 200px;">
+                <canvas id="mixChart"></canvas>
             </div>
+        </div>
+    </div>
+
+    <div class="glass-panel">
+        <div class="kpi-header" style="color: #fff; font-size: 1.1rem; margin-bottom: 1rem;">
+            QUADRO DE CONTROLE DE PRODUÇÃO MATRICIAL
+        </div>
+
+        <div class="board-legend">
+            <div class="legend-item"><div class="legend-box status-v">V</div> COMPLETO</div>
+            <div class="legend-item"><div class="legend-box status-x">X</div> PENDENTE</div>
+            <div class="legend-item"><div class="legend-box status-e">E</div> EMBALADO</div>
+            <div class="legend-item"><div class="legend-box status-none">-</div> NÃO SE APLICA</div>
+        </div>
+
+        <div class="production-board-wrapper">
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th>ID / Cliente</th>
+                        <th>Ref</th>
+                        <th>Ref Torre</th>
+                        <th>Gaiola Cad</th>
+                        <th>Cad</th>
+                        <th>R.B <br><span style="font-size: 0.65rem; color: #94a3b8">Ladder Barrel</span></th>
+                        <th>WVN <br><span style="font-size: 0.65rem; color: #94a3b8">Wunda</span></th>
+                        <th>ELEC <br><span style="font-size: 0.65rem; color: #94a3b8">Electric</span></th>
+                        <th>ARM <br><span style="font-size: 0.65rem; color: #94a3b8">Chair</span></th>
+                        <th>WV <br><span style="font-size: 0.65rem; color: #94a3b8">Wall Unit</span></th>
+                        <th>Mat</th>
+                        <th>P.Pole</th>
+                    </tr>
+                </thead>
+                <tbody id="matrix-body">
+                    <tr>
+                        <td class="row-header">PEDIDO #104<br><span style="font-size: 0.7rem;">(Cliente Premium A)</span></td>
+                        <td class="status-cell status-v">V</td><td class="status-cell status-none">-</td><td class="status-cell status-none">-</td><td class="status-cell status-e">E</td><td class="status-cell status-v">V</td><td class="status-cell status-v">V</td><td class="status-cell status-x">X</td><td class="status-cell status-none">-</td><td class="status-cell status-v">V</td><td class="status-cell status-none">-</td><td class="status-cell status-none">-</td>
+                    </tr>
+                    <tr>
+                        <td class="row-header">PEDIDO #105<br><span style="font-size: 0.7rem;">(Estúdio SP Centro)</span></td>
+                        <td class="status-cell status-v">V</td><td class="status-cell status-none">-</td><td class="status-cell status-none">-</td><td class="status-cell status-e">E</td><td class="status-cell status-v">V</td><td class="status-cell status-none">-</td><td class="status-cell status-none">-</td><td class="status-cell status-none">-</td><td class="status-cell status-v">V</td><td class="status-cell status-none">-</td><td class="status-cell status-none">-</td>
+                    </tr>
+                    <tr>
+                        <td class="row-header">PEDIDO #106<br><span style="font-size: 0.7rem;">(Pronta Entrega)</span></td>
+                        <td class="status-cell status-v">V</td><td class="status-cell status-none">-</td><td class="status-cell status-x" id="blink-x1">X</td><td class="status-cell status-e">E</td><td class="status-cell status-v">V</td><td class="status-cell status-v">V</td><td class="status-cell status-x">X</td><td class="status-cell status-none">-</td><td class="status-cell status-v">V</td><td class="status-cell status-none">-</td><td class="status-cell status-e">E</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <div class="toast-container" id="toast-box"></div>
 
     <script>
-        // Configurações globais do Chart.js para o modo Dark Glassmorphism
         Chart.defaults.color = '#94a3b8';
         Chart.defaults.font.family = "'Inter', sans-serif";
         Chart.defaults.scale.grid.color = 'rgba(51, 65, 85, 0.3)';
 
-        // 1. Gráfico Misto (Barra + Linha)
+        // 1. Gráfico Misto (O RETORNO!)
         const ctxMixed = document.getElementById('mixedChart').getContext('2d');
         const mixedChart = new Chart(ctxMixed, {
             type: 'bar',
             data: {
-                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex (Hoje)'],
+                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
                 datasets: [
-                    {
-                        type: 'line',
-                        label: 'Meta Diária',
-                        data: [45, 45, 50, 50, 50],
-                        borderColor: '#f59e0b',
-                        borderWidth: 2,
-                        borderDash: [5, 5],
-                        fill: false,
-                        tension: 0.3
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Produzido (Unidades)',
-                        data: [46, 42, 48, 51, 42],
-                        backgroundColor: '#06b6d4',
-                        borderRadius: 4
-                    }
+                    { type: 'line', label: 'Meta', data: [45, 45, 50, 50, 50], borderColor: '#f59e0b', borderWidth: 2, borderDash: [5, 5], fill: false, tension: 0.3 },
+                    { type: 'bar', label: 'Realizado', data: [46, 42, 48, 51, 42], backgroundColor: '#06b6d4', borderRadius: 4 }
                 ]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'top', align: 'end', labels: { boxWidth: 12 } } },
-                scales: { y: { beginAtZero: true } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { boxWidth: 10 } } }, scales: { y: { beginAtZero: true } } }
         });
 
-        // 2. Gráfico de Mix (Rosca com gradientes)
+        // 2. Gráfico Mix
         const ctxMix = document.getElementById('mixChart').getContext('2d');
         new Chart(ctxMix, {
             type: 'doughnut',
             data: {
-                labels: ['Reformers', 'Cadillacs', 'Chairs', 'Barrels'],
-                datasets: [{
-                    data: [55, 20, 15, 10],
-                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'],
-                    borderWidth: 0,
-                    hoverOffset: 5
-                }]
+                labels: ['Ref', 'Cad', 'Chair'],
+                datasets: [{ data: [55, 30, 15], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'], borderWidth: 0 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '75%',
-                plugins: {
-                    legend: { position: 'bottom', labels: { padding: 15, boxWidth: 10 } }
-                }
-            }
+            options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10 } } } }
         });
 
-        // 3. Sistema de Simulação de Tempo Real (Ganha Hackathons!)
-        function showToast(message, isError = false) {
+        // Simulação Dinâmica
+        function showToast(message) {
             const box = document.getElementById('toast-box');
             const toast = document.createElement('div');
-            toast.className = `toast ${isError ? 'error' : ''}`;
-            toast.innerHTML = `<strong>${isError ? '⚠️ Alerta' : '✅ Atualização'}</strong><br>${message}`;
+            toast.className = 'toast';
+            toast.innerHTML = `<strong>🔄 Sistema Atualizado</strong><br>${message}`;
             box.appendChild(toast);
-            
-            // Remove o toast depois de 4 segundos
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 5000);
         }
 
-        // Simulando eventos acontecendo no chão de fábrica
-        let prodCount = 42;
-        setInterval(() => {
-            // Sorteia um evento aleatório
-            const eventType = Math.random();
-
-            if (eventType > 0.7) {
-                // Simula montagem de um equipamento
-                if(prodCount < 50) {
-                    prodCount++;
-                    document.getElementById('prod-val').innerText = prodCount;
-                    document.querySelector('.progress-fill').style.width = `${(prodCount/50)*100}%`;
-                    showToast(`Novo Reformer liberado pela Qualidade. Total: ${prodCount}/50`);
-                    
-                    // Atualiza o gráfico de barras ao vivo
-                    mixedChart.data.datasets[1].data[4] = prodCount;
-                    mixedChart.update();
-                }
-            } else if (eventType < 0.1) {
-                // Simula um problema temporário na serralheria
-                const serralheria = document.getElementById('serralheria-step');
-                serralheria.classList.remove('warning');
-                serralheria.classList.add('critical');
-                serralheria.querySelector('.step-metric').innerText = "MÁQUINA PARADA";
-                serralheria.querySelector('.step-metric').style.color = "var(--accent-rose)";
-                showToast('Falha crítica detectada na Máquina de Solda MIG.', true);
+        setTimeout(() => {
+            const targetCell = document.getElementById('blink-x1');
+            if(targetCell) {
+                targetCell.className = 'status-cell status-v';
+                targetCell.innerText = 'V';
+                targetCell.style.transform = 'scale(1.1)';
+                setTimeout(() => targetCell.style.transform = 'scale(1)', 500);
                 
-                // Adiciona na tabela de ocorrências
-                const tbody = document.getElementById('alerts-body');
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>Serralheria</td><td>Falha Máquina de Solda</td><td><span class="badge bg-rose">CRÍTICO</span></td>`;
-                tbody.prepend(row); // Adiciona no topo
+                showToast("CQ Liberou a Gaiola Cadillac do Pedido #106.");
+                
+                // Atualiza o gráfico misto junto!
+                mixedChart.data.datasets[1].data[4] = 43; // Aumenta a produção de sexta
+                mixedChart.update();
             }
-        }, 8000); // Roda a cada 8 segundos para a banca do hackathon ter tempo de ver
+        }, 6000);
 
     </script>
 </body>
