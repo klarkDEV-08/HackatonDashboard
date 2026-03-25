@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipilates | Smart Factory Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* Design System - Dark Mode Avançado */
+            --bg-base: #07090e;
+            --bg-panel: rgba(15, 23, 42, 0.7);
+            --bg-panel-hover: rgba(30, 41, 59, 0.8);
+            --border-color: rgba(51, 65, 85, 0.5);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            
+            --glow-cyan: 0 0 15px rgba(6, 182, 212, 0.3);
+            --glow-rose: 0 0 15px rgba(244, 63, 94, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.05), transparent 25%);
+            color: var(--text-primary);
+            padding: 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Utilidades de Glassmorphism */
+        .glass-panel {
+            background: var(--bg-panel);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .glass-panel:hover { border-color: rgba(51, 65, 85, 0.9); }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .logo-area h1 { font-size: 1.5rem; font-weight: 700; background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue)); -webkit-background-clip: text; color: transparent; }
+        .logo-area p { color: var(--text-secondary); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px;}
+        
+        .pulse-status {
+            display: flex; align-items: center; gap: 8px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 8px 16px; border-radius: 50px; color: var(--accent-emerald);
+        }
+        .pulse-dot { width: 8px; height: 8px; background: var(--accent-emerald); border-radius: 50%; box-shadow: 0 0 10px var(--accent-emerald); animation: pulse 1.5s infinite; }
+
+        /* Grid Master */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 1.5rem;
+        }
+        .main-col { display: flex; flex-direction: column; gap: 1.5rem; }
+        .side-col { display: flex; flex-direction: column; gap: 1.5rem; }
+
+        /* KPIs Superiores */
+        .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        .kpi-card { display: flex; flex-direction: column; justify-content: space-between; }
+        .kpi-header { display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
+        .kpi-body { margin-top: 1rem; }
+        .kpi-value { font-size: 2rem; font-weight: 700; display: flex; align-items: baseline; gap: 8px; }
+        .kpi-unit { font-size: 1rem; color: var(--text-secondary); font-weight: 400; }
+        
+        /* Mini Progress Bars para KPIs */
+        .progress-track { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-top: 12px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease-in-out; }
+
+        /* Mapa de Chão de Fábrica - Equipilates */
+        .factory-flow {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 1rem;
+            position: relative;
+        }
+        .flow-step {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+        .flow-step.active { border-color: var(--accent-cyan); box-shadow: var(--glow-cyan); }
+        .flow-step.warning { border-color: var(--accent-amber); }
+        .flow-step.critical { border-color: var(--accent-rose); box-shadow: var(--glow-rose); animation: shake 0.5s infinite alternate; }
+        
+        .step-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .step-title { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
+        .step-metric { font-size: 0.75rem; color: var(--accent-cyan); margin-top: 4px; font-weight: 500;}
+
+        /* Tabelas e Badges */
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
+        .data-table th { text-align: left; padding: 12px 8px; color: var(--text-secondary); font-weight: 500; border-bottom: 1px solid var(--border-color); }
+        .data-table td { padding: 12px 8px; border-bottom: 1px solid rgba(51, 65, 85, 0.3); }
+        
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px; }
+        .bg-rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+        .bg-amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+        .bg-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+
+        /* Toasts System */
+        .toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
+        .toast { background: var(--bg-panel); backdrop-filter: blur(10px); border-left: 4px solid var(--accent-cyan); padding: 1rem; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); color: white; font-size: 0.85rem; min-width: 300px; transform: translateX(120%); animation: slideIn 0.3s forwards; }
+        .toast.error { border-left-color: var(--accent-rose); }
+
+        /* Animações */
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        @keyframes slideIn { to { transform: translateX(0); } }
+        @keyframes shake { from { transform: translateY(-2px); } to { transform: translateY(2px); } }
+
+        /* Responsividade */
+        @media (max-width: 1200px) { .dashboard-grid { grid-template-columns: 1fr; } .kpi-row { grid-template-columns: repeat(2, 1fr); } .factory-flow { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) { .kpi-row, .factory-flow { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <h1>Equipilates CmdCenter</h1>
+            <p>Inteligência de Produção • Planta 01</p>
+        </div>
+        <div class="pulse-status">
+            <div class="pulse-dot"></div>
+            <span id="sync-status">Sincronização Ativa (Ao Vivo)</span>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <div class="main-col">
+            <div class="kpi-row">
+                <div class="glass-panel kpi-card">
+                    <div class="kpi-header"><span>Produção Diária</span> <span style="color: var(--accent-emerald)">+5%</span></div>
+                    <div class="kpi-body">
+                        <div class="kpi-value"><span id="prod-val">42</span><span class="kpi-unit">/ 50 un</span></div>
+                        <div class="progress-track"><div class="progress-fill" style="width: 84%; background: var(--accent-cyan)"></div></div>
+                    </div>
+                </div>
+                <div class="glass-panel kpi-card">
+                    <div class="kpi-header"><span>OEE (Eficiência Global)</span> <span>Meta: 85%</span></div>
+                    <div class="kpi-body">
+                        <div class="kpi-value">81.2<span class="kpi-unit">%</span></div>
+                        <div class="progress-track"><div class="progress-fill" style="width: 81.2%; background: var(--accent-amber)"></div></div>
+                    </div>
+                </div>
+                <div class="glass-panel kpi-card">
+                    <div class="kpi-header"><span>Taxa de Refugo (Madeira)</span> <span style="color: var(--accent-emerald)">-0.5%</span></div>
+                    <div class="kpi-body">
+                        <div class="kpi-value" style="color: var(--accent-emerald)">1.8<span class="kpi-unit">%</span></div>
+                        <div class="progress-track"><div class="progress-fill" style="width: 1.8%; background: var(--accent-rose)"></div></div>
+                    </div>
+                </div>
+                <div class="glass-panel kpi-card">
+                    <div class="kpi-header"><span>Backlog de Pedidos</span></div>
+                    <div class="kpi-body">
+                        <div class="kpi-value">128<span class="kpi-unit">Aparelhos</span></div>
+                        <div style="margin-top: 12px; font-size: 0.75rem; color: var(--text-secondary);">Equivalente a 3.5 dias de produção</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel">
+                <div class="kpi-header" style="margin-bottom: 0.5rem; font-size: 1rem; color: #fff;">Status do Chão de Fábrica (Gargalos)</div>
+                <div class="factory-flow">
+                    <div class="flow-step active">
+                        <div class="step-icon">🪚</div>
+                        <div class="step-title">Marcenaria CNC</div>
+                        <div class="step-metric">22 Peças/h</div>
+                    </div>
+                    <div class="flow-step warning" id="serralheria-step">
+                        <div class="step-icon">⚡</div>
+                        <div class="step-title">Serralheria/Solda</div>
+                        <div class="step-metric" style="color: var(--accent-amber)">Atraso: 15 min</div>
+                    </div>
+                    <div class="flow-step active">
+                        <div class="step-icon">🧵</div>
+                        <div class="step-title">Estofaria</div>
+                        <div class="step-metric">Estável</div>
+                    </div>
+                    <div class="flow-step active">
+                        <div class="step-icon">🔧</div>
+                        <div class="step-title">Montagem Final</div>
+                        <div class="step-metric">Reformers em foco</div>
+                    </div>
+                    <div class="flow-step active">
+                        <div class="step-icon">📦</div>
+                        <div class="step-title">CQ & Expedição</div>
+                        <div class="step-metric">4 Liberações</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel">
+                <div class="kpi-header" style="margin-bottom: 1rem; font-size: 1rem; color: #fff;">Volume de Produção: Previsto vs Realizado (Semana)</div>
+                <div style="height: 250px; width: 100%;">
+                    <canvas id="mixedChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="side-col">
+            <div class="glass-panel">
+                <div class="kpi-header" style="margin-bottom: 1rem; color: #fff;">Mix em Linha Hoje</div>
+                <div style="height: 180px; width: 100%;">
+                    <canvas id="mixChart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="flex-grow: 1;">
+                <div class="kpi-header" style="margin-bottom: 1rem; color: #fff;">Diário de Ocorrências</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Local</th>
+                            <th>Motivo</th>
+                            <th>Nível</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alerts-body">
+                        <tr>
+                            <td>Serralheria</td>
+                            <td>Falta Gás Mig</td>
+                            <td><span class="badge bg-amber">ATENÇÃO</span></td>
+                        </tr>
+                        <tr>
+                            <td>Marcenaria</td>
+                            <td>Troca de Fresa CNC</td>
+                            <td><span class="badge bg-emerald">RESOLVIDO</span></td>
+                        </tr>
+                        <tr>
+                            <td>Montagem</td>
+                            <td>Lote Mola QC Reprovado</td>
+                            <td><span class="badge bg-rose">CRÍTICO</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-box"></div>
+
+    <script>
+        // Configurações globais do Chart.js para o modo Dark Glassmorphism
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.scale.grid.color = 'rgba(51, 65, 85, 0.3)';
+
+        // 1. Gráfico Misto (Barra + Linha)
+        const ctxMixed = document.getElementById('mixedChart').getContext('2d');
+        const mixedChart = new Chart(ctxMixed, {
+            type: 'bar',
+            data: {
+                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex (Hoje)'],
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Meta Diária',
+                        data: [45, 45, 50, 50, 50],
+                        borderColor: '#f59e0b',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Produzido (Unidades)',
+                        data: [46, 42, 48, 51, 42],
+                        backgroundColor: '#06b6d4',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top', align: 'end', labels: { boxWidth: 12 } } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // 2. Gráfico de Mix (Rosca com gradientes)
+        const ctxMix = document.getElementById('mixChart').getContext('2d');
+        new Chart(ctxMix, {
+            type: 'doughnut',
+            data: {
+                labels: ['Reformers', 'Cadillacs', 'Chairs', 'Barrels'],
+                datasets: [{
+                    data: [55, 20, 15, 10],
+                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'],
+                    borderWidth: 0,
+                    hoverOffset: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 15, boxWidth: 10 } }
+                }
+            }
+        });
+
+        // 3. Sistema de Simulação de Tempo Real (Ganha Hackathons!)
+        function showToast(message, isError = false) {
+            const box = document.getElementById('toast-box');
+            const toast = document.createElement('div');
+            toast.className = `toast ${isError ? 'error' : ''}`;
+            toast.innerHTML = `<strong>${isError ? '⚠️ Alerta' : '✅ Atualização'}</strong><br>${message}`;
+            box.appendChild(toast);
+            
+            // Remove o toast depois de 4 segundos
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Simulando eventos acontecendo no chão de fábrica
+        let prodCount = 42;
+        setInterval(() => {
+            // Sorteia um evento aleatório
+            const eventType = Math.random();
+
+            if (eventType > 0.7) {
+                // Simula montagem de um equipamento
+                if(prodCount < 50) {
+                    prodCount++;
+                    document.getElementById('prod-val').innerText = prodCount;
+                    document.querySelector('.progress-fill').style.width = `${(prodCount/50)*100}%`;
+                    showToast(`Novo Reformer liberado pela Qualidade. Total: ${prodCount}/50`);
+                    
+                    // Atualiza o gráfico de barras ao vivo
+                    mixedChart.data.datasets[1].data[4] = prodCount;
+                    mixedChart.update();
+                }
+            } else if (eventType < 0.1) {
+                // Simula um problema temporário na serralheria
+                const serralheria = document.getElementById('serralheria-step');
+                serralheria.classList.remove('warning');
+                serralheria.classList.add('critical');
+                serralheria.querySelector('.step-metric').innerText = "MÁQUINA PARADA";
+                serralheria.querySelector('.step-metric').style.color = "var(--accent-rose)";
+                showToast('Falha crítica detectada na Máquina de Solda MIG.', true);
+                
+                // Adiciona na tabela de ocorrências
+                const tbody = document.getElementById('alerts-body');
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>Serralheria</td><td>Falha Máquina de Solda</td><td><span class="badge bg-rose">CRÍTICO</span></td>`;
+                tbody.prepend(row); // Adiciona no topo
+            }
+        }, 8000); // Roda a cada 8 segundos para a banca do hackathon ter tempo de ver
+
+    </script>
+</body>
+</html>
