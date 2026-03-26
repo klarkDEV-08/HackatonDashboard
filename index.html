@@ -63,8 +63,6 @@
 
         /* Grids Base */
         .top-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-        
-        /* NOVO: Grid Intermediário para caber os Gráficos e o Fluxo */
         .mid-grid { display: grid; grid-template-columns: 1.5fr 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
 
         /* KPIs */
@@ -84,6 +82,11 @@
 
         /* QUADRO DE CONTROLE DE PRODUÇÃO MATRICIAL */
         .production-board-wrapper { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
+        /* Esconde barra de rolagem mas mantém funcionalidade para visual mais limpo */
+        .production-board-wrapper::-webkit-scrollbar { height: 8px; }
+        .production-board-wrapper::-webkit-scrollbar-track { background: var(--bg-panel); border-radius: 8px; }
+        .production-board-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 8px; }
+
         .board-legend { display: flex; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; background: rgba(0,0,0,0.2); padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border-color); }
         .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;}
         .legend-box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
@@ -97,15 +100,69 @@
         .status-v { background-color: #10b981; color: white; border: 1px solid #059669; }
         .status-x { background-color: #ef4444; color: white; border: 1px solid #dc2626; box-shadow: var(--glow-rose) !important;}
         .status-e { background-color: #3b82f6; color: white; border: 1px solid #2563eb; }
-        .status-none { background-color: #334155; color: #94a3b8; border: 1px solid #1e293b; }
+        .status-none { background-color: #b9de11; color: #030410; border: 1px solid #1e293b; }
 
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
         
         .toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
-        .toast { background: var(--bg-panel); backdrop-filter: blur(10px); border-left: 4px solid var(--accent-cyan); padding: 1rem; border-radius: 8px; color: white; font-size: 0.85rem; animation: slideIn 0.3s forwards; }
+        .toast { background: var(--bg-panel); backdrop-filter: blur(10px); border-left: 4px solid var(--accent-cyan); padding: 1rem; border-radius: 8px; color: white; font-size: 0.85rem; animation: slideIn 0.3s forwards; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
         @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
 
-        @media (max-width: 1200px) { .mid-grid, .top-grid { grid-template-columns: 1fr; } }
+        /* --- MEDIA QUERIES PARA RESPONSIVIDADE --- */
+        
+        /* Tablets e Notebooks menores */
+        @media (max-width: 1200px) { 
+            .mid-grid, .top-grid { grid-template-columns: 1fr; } 
+        }
+
+        /* Celulares */
+        @media (max-width: 768px) {
+            body {
+                padding: 0.75rem; /* Menos margem no celular */
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .logo-area h1 {
+                font-size: 1.3rem;
+            }
+
+            .pulse-status {
+                width: 100%;
+                justify-content: center; /* Centraliza o status no mobile */
+                padding: 10px;
+            }
+
+            .glass-panel {
+                padding: 1rem; /* Dá um respiro melhor dentro dos cards */
+            }
+
+            .kpi-value {
+                font-size: 1.6rem; /* Reduz um pouco os números gigantes */
+            }
+
+            .board-legend {
+                gap: 0.8rem;
+                justify-content: center;
+            }
+
+            .toast-container {
+                left: 20px; /* Faz os toasts ocuparem a tela no celular */
+                right: 20px;
+                bottom: 20px;
+                align-items: center;
+            }
+
+            .toast {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -226,7 +283,7 @@
         Chart.defaults.font.family = "'Inter', sans-serif";
         Chart.defaults.scale.grid.color = 'rgba(51, 65, 85, 0.3)';
 
-        // 1. Gráfico Misto (O RETORNO!)
+        // 1. Gráfico Misto
         const ctxMixed = document.getElementById('mixedChart').getContext('2d');
         const mixedChart = new Chart(ctxMixed, {
             type: 'bar',
