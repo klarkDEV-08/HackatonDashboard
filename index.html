@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            /* Design System - Dark Mode Avançado */
             --bg-base: #07090e;
             --bg-panel: rgba(15, 23, 42, 0.7);
             --border-color: rgba(51, 65, 85, 0.5);
@@ -40,7 +39,6 @@
             flex-direction: column;
         }
 
-        /* Glassmorphism */
         .glass-panel {
             background: var(--bg-panel);
             backdrop-filter: blur(12px);
@@ -53,7 +51,7 @@
             flex-direction: column;
         }
 
-        /* Header */
+        
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
         .logo-area h1 { font-size: 1.5rem; font-weight: 700; background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue)); -webkit-background-clip: text; color: transparent; }
         .logo-area p { color: var(--text-secondary); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px;}
@@ -61,18 +59,18 @@
         .pulse-status { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 8px 16px; border-radius: 50px; color: var(--accent-emerald); }
         .pulse-dot { width: 8px; height: 8px; background: var(--accent-emerald); border-radius: 50%; box-shadow: 0 0 10px var(--accent-emerald); animation: pulse 1.5s infinite; }
 
-        /* Grids Base */
+        
         .top-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
         .mid-grid { display: grid; grid-template-columns: 1.5fr 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
 
-        /* KPIs */
+       
         .kpi-header { display: flex; justify-content: space-between; color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; }
         .kpi-value { font-size: 2rem; font-weight: 700; display: flex; align-items: baseline; gap: 8px; margin-top: 1rem;}
         .kpi-unit { font-size: 1rem; color: var(--text-secondary); font-weight: 400; }
         .progress-track { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 4px; margin-top: 12px; overflow: hidden; }
         .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 
-        /* Flow Fábrica */
+       
         .factory-flow { display: flex; flex-direction: column; gap: 8px; margin-top: 1rem; flex-grow: 1; justify-content: space-between;}
         .flow-step { background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.8rem; display: flex; align-items: center; gap: 12px; }
         .flow-step.active { border-color: var(--accent-cyan); box-shadow: var(--glow-cyan); }
@@ -80,9 +78,9 @@
         .step-icon { font-size: 1.2rem; }
         .step-title { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
 
-        /* QUADRO DE CONTROLE DE PRODUÇÃO MATRICIAL */
+        
         .production-board-wrapper { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
-        /* Esconde barra de rolagem mas mantém funcionalidade para visual mais limpo */
+        
         .production-board-wrapper::-webkit-scrollbar { height: 8px; }
         .production-board-wrapper::-webkit-scrollbar-track { background: var(--bg-panel); border-radius: 8px; }
         .production-board-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 8px; }
@@ -108,17 +106,15 @@
         .toast { background: var(--bg-panel); backdrop-filter: blur(10px); border-left: 4px solid var(--accent-cyan); padding: 1rem; border-radius: 8px; color: white; font-size: 0.85rem; animation: slideIn 0.3s forwards; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
         @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
 
-        /* --- MEDIA QUERIES PARA RESPONSIVIDADE --- */
-        
-        /* Tablets e Notebooks menores */
+    
         @media (max-width: 1200px) { 
             .mid-grid, .top-grid { grid-template-columns: 1fr; } 
         }
 
-        /* Celulares */
+       
         @media (max-width: 768px) {
             body {
-                padding: 0.75rem; /* Menos margem no celular */
+                padding: 0.75rem; 
             }
             
             header {
@@ -134,16 +130,16 @@
 
             .pulse-status {
                 width: 100%;
-                justify-content: center; /* Centraliza o status no mobile */
+                justify-content: center;
                 padding: 10px;
             }
 
             .glass-panel {
-                padding: 1rem; /* Dá um respiro melhor dentro dos cards */
+                padding: 1rem; 
             }
 
             .kpi-value {
-                font-size: 1.6rem; /* Reduz um pouco os números gigantes */
+                font-size: 1.6rem; 
             }
 
             .board-legend {
@@ -152,7 +148,7 @@
             }
 
             .toast-container {
-                left: 20px; /* Faz os toasts ocuparem a tela no celular */
+                left: 20px; 
                 right: 20px;
                 bottom: 20px;
                 align-items: center;
@@ -283,7 +279,7 @@
         Chart.defaults.font.family = "'Inter', sans-serif";
         Chart.defaults.scale.grid.color = 'rgba(51, 65, 85, 0.3)';
 
-        // 1. Gráfico Misto
+       
         const ctxMixed = document.getElementById('mixedChart').getContext('2d');
         const mixedChart = new Chart(ctxMixed, {
             type: 'bar',
@@ -297,7 +293,7 @@
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { boxWidth: 10 } } }, scales: { y: { beginAtZero: true } } }
         });
 
-        // 2. Gráfico Mix
+      
         const ctxMix = document.getElementById('mixChart').getContext('2d');
         new Chart(ctxMix, {
             type: 'doughnut',
@@ -308,7 +304,7 @@
             options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10 } } } }
         });
 
-        // Simulação Dinâmica
+       
         function showToast(message) {
             const box = document.getElementById('toast-box');
             const toast = document.createElement('div');
@@ -328,8 +324,8 @@
                 
                 showToast("CQ Liberou a Gaiola Cadillac do Pedido #106.");
                 
-                // Atualiza o gráfico misto junto!
-                mixedChart.data.datasets[1].data[4] = 43; // Aumenta a produção de sexta
+                
+                mixedChart.data.datasets[1].data[4] = 43; 
                 mixedChart.update();
             }
         }, 6000);
